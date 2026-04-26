@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GREEN-API Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="left-panel">
+        <input id="idInstance" type="text" placeholder="idInstance" />
+        <input id="apiTokenInstance" type="text" placeholder="ApiTokenInstance" />
+
+        <button id="getSettingsBtn" type="button">getSettings</button>
+        <button id="getStateBtn" type="button">getStateInstance</button>
+
+        <input id="messageChatId" type="text" placeholder="77771234567@c.us" />
+        <textarea id="messageText" placeholder="Hello World!"></textarea>
+        <button id="sendMessageBtn" type="button">sendMessage</button>
+
+        <input id="fileChatId" type="text" placeholder="77771234567@c.us" />
+        <input
+          id="fileUrl"
+          type="url"
+          placeholder="https://my.site.com/img/horse.png"
+        />
+        <button id="sendFileBtn" type="button">sendFileByUrl</button>
+      </section>
+
+      <section class="right-panel">
+        <label for="responseOutput">Response</label>
+        <textarea id="responseOutput" readonly></textarea>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
