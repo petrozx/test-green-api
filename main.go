@@ -57,7 +57,11 @@ func main() {
 	}
 
 	log.Printf("Server started at http://localhost:%s", port)
-	log.Printf("GREEN-API host: %s", appConfig.GreenAPIHost)
+	if appConfig.GreenAPIHost != "" {
+		log.Printf("GREEN-API host override: %s", appConfig.GreenAPIHost)
+	} else {
+		log.Printf("GREEN-API host mode: derive from idInstance prefix")
+	}
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("server error: %v", err)
 	}
@@ -65,10 +69,6 @@ func main() {
 
 func loadConfig() config {
 	host := strings.TrimSpace(os.Getenv("GREEN_API_HOST"))
-	if host == "" {
-		host = "3100.api.green-api.com"
-	}
-
 	return config{
 		GreenAPIHost: host,
 	}
@@ -205,9 +205,10 @@ func decodeJSON(r *http.Request, dst any) error {
 }
 
 func callGreenAPI(creds credentials, method string, payload any) ([]byte, int, error) {
+	host := resolveGreenAPIHost(creds.IDInstance)
 	url := fmt.Sprintf(
 		"https://%s/waInstance%s/%s/%s",
-		appConfig.GreenAPIHost,
+		host,
 		creds.IDInstance,
 		method,
 		creds.APITokenInstance,
@@ -248,6 +249,19 @@ func callGreenAPI(creds credentials, method string, payload any) ([]byte, int, e
 	}
 
 	return respBody, resp.StatusCode, nil
+}
+
+func resolveGreenAPIHost(idInstance string) string {
+	if appConfig.GreenAPIHost != "" {
+		return appConfig.GreenAPIHost
+	}
+
+	trimmed := strings.TrimSpace(idInstance)
+	if len(trimmed) >= 4 {
+		return fmt.Sprintf("%s.api.green-api.com", trimmed[:4])
+	}
+
+	return "api.green-api.com"
 }
 
 func requestMethodFromPayload(payload any) string {

@@ -24,7 +24,10 @@ Open:
 
 Optional config:
 
-- `GREEN_API_HOST` (default: `3100.api.green-api.com`)
+- `GREEN_API_HOST` (optional override)
+- if `GREEN_API_HOST` is not set, host is derived from `idInstance` prefix:
+  - `1105600712` -> `1105.api.green-api.com`
+  - `3100600701` -> `3100.api.green-api.com`
 
 Example:
 
